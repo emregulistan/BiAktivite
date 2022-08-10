@@ -1,18 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Application.Activities;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Application.Activities;
 
 namespace API.Controllers
-
 {
     public class ActivitiesController : BaseApiController
     {
-
         [HttpGet]
         public async Task<ActionResult<List<Activity>>> GetActivities()
         {
@@ -20,13 +17,13 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> GetActivity(Guid id) 
+        public async Task<ActionResult<Activity>> GetActivity(Guid id)
         {
             return await Mediator.Send(new Details.Query{Id = id});
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateActivity([FromBody]Activity activity)
+        public async Task<IActionResult> CreateActivity(Activity activity)
         {
             return Ok(await Mediator.Send(new Create.Command {Activity = activity}));
         }
@@ -43,6 +40,5 @@ namespace API.Controllers
         {
             return Ok(await Mediator.Send(new Delete.Command{Id = id}));
         }
-
     }
 }
